@@ -1,5 +1,6 @@
 # Customer_Churn_prediction
 Internship project titled above is aimed to develop a machine learning-based predictive model to identify customers at risk of churning from a subscription-based service, such as a telecommunications company.
+
 Key Objectives:
 
 Analyze customer behavior and usage patterns from historical data.
