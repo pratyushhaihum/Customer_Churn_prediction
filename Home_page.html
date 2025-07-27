@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChurnGuard AI | Predictive Customer Retention</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .chart-container {
+            position: relative;
+            height: 200px;
+        }
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 10%;
+            background: linear-gradient(to top, #3b82f6, #8b5cf6);
+            border-radius: 4px 4px 0 0;
+            transition: height 1s ease;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <svg class="h-8 w-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"/>
+                        </svg>
+                        <span class="ml-2 text-xl font-bold text-gray-800">ChurnGuard AI</span>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-blue-600 bg-blue-50">Home</a>
+                            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Dashboard</a>
+                            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Features</a>
+                            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Documentation</a>
+                            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">About</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-gradient py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:flex lg:items-center lg:justify-between">
+                <div class="lg:w-1/2">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
+                        Predict Customer Churn with <span class="gradient-text">Machine Learning</span>
+                    </h1>
+                    <p class="mt-4 text-xl text-gray-600 max-w-3xl">
+                        Our advanced predictive model helps subscription-based businesses identify customers at risk of churning before they leave, enabling proactive retention strategies.
+                    </p>
+                    <div class="mt-8 flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-base font-medium shadow-lg transition-colors duration-300">
+                            View Demo
+                        </button>
+                        <button class="bg-white hover:bg-gray-50 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg text-base font-medium shadow-lg transition-colors duration-300">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-10 lg:mt-0 lg:w-1/2">
+                    <div class="bg-white rounded-xl shadow-xl p-6 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 h-24 w-24 bg-blue-50 rounded-bl-full"></div>
+                        <div class="relative">
+                            <div class="flex items-center mb-4">
+                                <div class="h-3 w-3 bg-red-500 rounded-full mr-2"></div>
+                                <div class="h-3 w-3 bg-yellow-500 rounded-full mr-2"></div>
+                                <div class="h-3 w-3 bg-green-500 rounded-full"></div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div class="text-sm font-medium text-gray-500">Churn Prediction Model</div>
+                                    <div class="text-sm font-medium text-blue-600">94% Accuracy</div>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full">
+                                    <div class="h-2 bg-blue-600 rounded-full" style="width: 94%"></div>
+                                </div>
+                                <div class="chart-container mt-8 border-b border-gray-200 pb-4">
+                                    <div id="chart" class="flex items-end justify-between h-40 w-full">
+                                        <!-- Chart bars will be added by JS -->
+                                    </div>
+                                    <div class="flex justify-between mt-2 text-xs text-gray-500">
+                                        <span>Jan</span>
+                                        <span>Feb</span>
+                                        <span>Mar</span>
+                                        <span>Apr</span>
+                                        <span>May</span>
+                                        <span>Jun</span>
+                                        <span>Jul</span>
+                                        <span>Aug</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 mt-4">
+                                    <div class="pulse h-3 w-3 bg-green-500 rounded-full"></div>
+                                    <span class="text-sm text-gray-600">Live prediction in progress</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold text-gray-900">Key Features</h2>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                    Our machine learning model provides powerful insights to help you retain valuable customers.
+                </p>
+            </div>
+
+            <div class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Feature 1 -->
+                <div class="bg-blue-50 rounded-xl p-8 card-hover">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white mb-5">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Predictive Analytics</h3>
+                    <p class="text-gray-600">
+                        Identify customers likely to churn with up to 94% accuracy using our advanced machine learning algorithms.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-purple-50 rounded-xl p-8 card-hover">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-purple-600 text-white mb-5">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Real-time Monitoring</h3>
+                    <p class="text-gray-600">
+                        Track customer behavior patterns in real-time to detect early warning signs of potential churn.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-indigo-50 rounded-xl p-8 card-hover">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-600 text-white mb-5">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Actionable Insights</h3>
+                    <p class="text-gray-600">
+                        Get personalized recommendations for retention strategies based on individual customer profiles.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold text-gray-900">How It Works</h2>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                    Our machine learning model analyzes customer data to predict churn probability.
+                </p>
+            </div>
+
+            <div class="mt-16">
+                <div class="relative">
+                    <!-- Steps -->
+                    <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-blue-200"></div>
+                    
+                    <!-- Step 1 -->
+                    <div class="relative mb-16">
+                        <div class="md:flex items-center">
+                            <div class="md:w-1/2 md:pr-8 md:text-right">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Data Collection & Processing</h3>
+                                <p class="text-gray-600">We collect and process customer data including usage patterns, billing history, and support interactions.</p>
+                            </div>
+                            <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <div class="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center">1</div>
+                            </div>
+                            <div class="md:w-1/2 md:pl-8 mt-4 md:mt-0">
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <svg class="h-12 w-12 text-blue-600 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative mb-16">
+                        <div class="md:flex items-center">
+                            <div class="md:w-1/2 md:pr-8 md:text-right order-last md:order-first">
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <svg class="h-12 w-12 text-blue-600 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <div class="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center">2</div>
+                            </div>
+                            <div class="md:w-1/2 md:pl-8 mt-4 md:mt-0 order-first md:order-last">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Model Training</h3>
+                                <p class="text-gray-600">Our algorithm learns from historical data to identify patterns that lead to customer churn.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative">
+                        <div class="md:flex items-center">
+                            <div class="md:w-1/2 md:pr-8 md:text-right">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Prediction & Action</h3>
+                                <p class="text-gray-600">The model generates churn probability scores and recommends targeted retention strategies.</p>
+                            </div>
+                            <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <div class="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center">3</div>
+                            </div>
+                            <div class="md:w-1/2 md:pl-8 mt-4 md:mt-0">
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <svg class="h-12 w-12 text-blue-600 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="py-16 bg-blue-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold text-white">Proven Results</h2>
+                <p class="mt-4 max-w-2xl text-xl text-blue-100 mx-auto">
+                    Our machine learning model has helped businesses achieve significant improvements in customer retention.
+                </p>
+            </div>
+
+            <div class="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="bg-white bg-opacity-10 rounded-lg p-8 text-center">
+                    <p class="text-4xl font-extrabold text-white">94%</p>
+                    <p class="mt-2 text-lg text-blue-100">Prediction Accuracy</p>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-lg p-8 text-center">
+                    <p class="text-4xl font-extrabold text-white">35%</p>
+                    <p class="mt-2 text-lg text-blue-100">Churn Reduction</p>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-lg p-8 text-center">
+                    <p class="text-4xl font-extrabold text-white">28%</p>
+                    <p class="mt-2 text-lg text-blue-100">Revenue Increase</p>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-lg p-8 text-center">
+                    <p class="text-4xl font-extrabold text-white">3.2x</p>
+                    <p class="mt-2 text-lg text-blue-100">ROI</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl overflow-hidden">
+                <div class="px-6 py-12 sm:px-12 sm:py-16 lg:flex lg:items-center lg:justify-between">
+                    <div>
+                        <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
+                            <span class="block">Ready to reduce customer churn?</span>
+                            <span class="block text-blue-200">Start using our prediction model today.</span>
+                        </h2>
+                        <p class="mt-4 text-lg text-blue-100 max-w-3xl">
+                            Schedule a demo to see how our machine learning model can help your business identify and retain at-risk customers.
+                        </p>
+                    </div>
+                    <div class="mt-8 lg:mt-0 lg:ml-8">
+                        <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                            <button class="bg-white text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg text-base font-medium shadow-lg transition-colors duration-300">
+                                Schedule Demo
+                            </button>
+                            <button class="bg-transparent hover:bg-blue-700 text-white border border-white px-6 py-3 rounded-lg text-base font-medium shadow-lg transition-colors duration-300">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center">
+                        <svg class="h-8 w-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"/>
+                        </svg>
+                        <span class="ml-2 text-xl font-bold">ChurnGuard AI</span>
+                    </div>
+                    <p class="mt-4 text-gray-400">
+                        Advanced machine learning solutions for customer retention in subscription-based businesses.
+                    </p>
+                    <div class="mt-6 flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <span class="sr-only">Twitter</span>
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <span class="sr-only">LinkedIn</span>
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <span class="sr-only">GitHub</span>
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Solutions</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">Telecom</a></li>
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">SaaS</a></li>
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">E-commerce</a></li>
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">Media & Entertainment</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Company</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">About</a></li>
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-gray-800 pt-8">
+                <p class="text-base text-gray-400 text-center">
+                    &copy; 2023 ChurnGuard AI. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animate chart bars on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const chart = document.getElementById('chart');
+            const values = [65, 59, 80, 81, 56, 55, 72, 68];
+            
+            // Create bars
+            for (let i = 0; i < values.length; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.left = (i * 12.5) + '%';
+                bar.style.height = '0';
+                chart.appendChild(bar);
+                
+                // Animate after a small delay
+                setTimeout(() => {
+                    bar.style.height = (values[i] / 100 * 100) + '%';
+                }, 300 + (i * 100));
+            }
+        });
+
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'965e09ec510e5a12',t:'MTc1MzYzOTI1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
