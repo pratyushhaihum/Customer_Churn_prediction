@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChurnGuard AI | Predictive Customer Retention</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .chart-container {
+            position: relative;
+            height: 200px;
+        }
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 10%;
+            background: linear-gradient(to top, #3b82f6, #8b5cf6);
+            border-radius: 4px 4px 0 0;
+            transition: height 1s ease;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+        .calculating {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <svg class="h-8 w-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"/>
+                        </svg>
+                        <span class="ml-2 text-xl font-bold text-gray-800">ChurnGuard AI</span>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-blue-600 bg-blue-50">Home</a>
+                            <a href="#calculator" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Calculator</a>
+                            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Features</a>
+                            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Documentation</a>
+                            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">About</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <button onclick="openDatabaseModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300">Database Setup</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-gradient py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:flex lg:items-center lg:justify-between">
+                <div class="lg:w-1/2">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
+                        Predict Customer Churn with <span class="gradient-text">Machine Learning</span>
+                    </h1>
+                    <p class="mt-4 text-xl text-gray-600 max-w-3xl">
+                        Our advanced predictive model helps subscription-based businesses identify customers at risk of churning before they leave, enabling proactive retention strategies.
+                    </p>
+                    <div class="mt-8 flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                        <button onclick="document.getElementById('calculator').scrollIntoView({behavior: 'smooth'})" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-base font-medium shadow-lg transition-colors duration-300">
+                            Try Calculator
+                        </button>
+                        <button onclick="openSchemaModal()" class="bg-white hover:bg-gray-50 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg text-base font-medium shadow-lg transition-colors duration-300">
+                            View Schema
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-10 lg:mt-0 lg:w-1/2">
+                    <div class="bg-white rounded-xl shadow-xl p-6 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 h-24 w-24 bg-blue-50 rounded-bl-full"></div>
+                        <div class="relative">
+                            <div class="flex items-center mb-4">
+                                <div class="h-3 w-3 bg-red-500 rounded-full mr-2"></div>
+                                <div class="h-3 w-3 bg-yellow-500 rounded-full mr-2"></div>
+                                <div class="h-3 w-3 bg-green-500 rounded-full"></div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div class="text-sm font-medium text-gray-500">Churn Prediction Model</div>
+                                    <div class="text-sm font-medium text-blue-600">94% Accuracy</div>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full">
+                                    <div class="h-2 bg-blue-600 rounded-full" style="width: 94%"></div>
+                                </div>
+                                <div class="chart-container mt-8 border-b border-gray-200 pb-4">
+                                    <div id="chart" class="flex items-end justify-between h-40 w-full">
+                                        <!-- Chart bars will be added by JS -->
+                                    </div>
+                                    <div class="flex justify-between mt-2 text-xs text-gray-500">
+                                        <span>Jan</span>
+                                        <span>Feb</span>
+                                        <span>Mar</span>
+                                        <span>Apr</span>
+                                        <span>May</span>
+                                        <span>Jun</span>
+                                        <span>Jul</span>
+                                        <span>Aug</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 mt-4">
+                                    <div class="pulse h-3 w-3 bg-green-500 rounded-full"></div>
+                                    <span class="text-sm text-gray-600">Live prediction in progress</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Churn Probability Calculator Section -->
+    <div id="calculator" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-extrabold text-gray-900">Churn Probability Calculator</h2>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                    Enter customer details below to get an instant churn prediction with our AI model.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Input Form -->
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">Customer Information</h3>
+                    
+                    <form id="churnCalculatorForm" class="space-y-6">
+                        <!-- Demographics -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Age</label>
+                                <input type="number" id="age" min="18" max="100" value="35" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                                <select id="gender" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Service Details -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tenure (months)</label>
+                                <input type="number" id="tenure" min="1" max="120" value="12" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Charges ($)</label>
+                                <input type="number" id="monthlyCharges" min="0" step="0.01" value="79.99" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Total Charges ($)</label>
+                            <input type="number" id="totalCharges" min="0" step="0.01" value="959.88" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <!-- Contract & Payment -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Contract Type</label>
+                                <select id="contractType" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="Month-to-month">Month-to-month</option>
+                                    <option value="One year">One year</option>
+                                    <option value="Two year">Two year</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+                                <select id="paymentMethod" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="Electronic check">Electronic check</option>
+                                    <option value="Mailed check">Mailed check</option>
+                                    <option value="Bank transfer">Bank transfer</option>
+                                    <option value="Credit card">Credit card</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Services -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Services</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="phoneService" checked class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Phone Service</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="multipleLines" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Multiple Lines</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="onlineSecurity" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Online Security</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="onlineBackup" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Online Backup</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="deviceProtection" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Device Protection</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="techSupport" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Tech Support</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="streamingTV" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Streaming TV</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="streamingMovies" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Streaming Movies</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Internet Service</label>
+                            <select id="internetService" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="DSL">DSL</option>
+                                <option value="Fiber optic">Fiber optic</option>
+                                <option value="No">No internet service</option>
+                            </select>
+                        </div>
+
+                        <label class="flex items-center">
+                            <input type="checkbox" id="paperlessBilling" checked class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                            <span class="ml-2 text-sm text-gray-700">Paperless Billing</span>
+                        </label>
+
+                        <button type="button" onclick="calculateChurn()" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-base font-medium shadow-lg transition-colors duration-300">
+                            <span id="calculateButtonText">Calculate Churn Probability</span>
+                            <svg id="calculateSpinner" class="hidden inline w-4 h-4 ml-2 calculating" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Panel -->
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">Prediction Results</h3>
+                    
+                    <div id="resultsContainer" class="text-center">
+                        <div class="mb-8">
+                            <svg class="w-24 h-24 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            <p class="text-gray-500 mt-4">Enter customer details and click "Calculate" to see the churn prediction.</p>
+                        </div>
+                    </div>
+
+                    <div id="predictionResults" class="hidden">
+                        <!-- Churn Probability Gauge -->
+                        <div class="text-center mb-8">
+                            <div class="relative inline-block">
+                                <svg class="w-32 h-32 transform -rotate-90" viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="50" stroke="#e5e7eb" stroke-width="8" fill="none"></circle>
+                                    <circle id="progressCircle" cx="60" cy="60" r="50" stroke="#3b82f6" stroke-width="8" fill="none" 
+                                            stroke-dasharray="314" stroke-dashoffset="314" class="transition-all duration-1000 ease-out"></circle>
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <div id="churnPercentage" class="text-2xl font-bold text-gray-900">0%</div>
+                                        <div class="text-xs text-gray-500">Churn Risk</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Risk Level Badge -->
+                        <div class="text-center mb-6">
+                            <span id="riskBadge" class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium">
+                                <span id="riskLevel">Low Risk</span>
+                            </span>
+                        </div>
+
+                        <!-- Key Factors -->
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-gray-900 mb-3">Key Risk Factors</h4>
+                            <div id="riskFactors" class="space-y-2">
+                                <!-- Risk factors will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Recommendations -->
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-blue-900 mb-2">Recommended Actions</h4>
+                            <div id="recommendations" class="text-sm text-blue-800">
+                                <!-- Recommendations will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Model Confidence -->
+                        <div class="mt-6 text-center">
+                            <div class="text-sm text-gray-500">
+                                Model Confidence: <span id="modelConfidence" class="font-medium">94%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold text-gray-900">Key Features</h2>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                    Our machine learning model provides powerful insights to help you retain valuable customers.
+                </p>
+            </div>
+
+            <div class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Feature 1 -->
+                <div class="bg-blue-50 rounded-xl p-8 card-hover">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white mb-5">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Predictive Analytics</h3>
+                    <p class="text-gray-600">
+                        Identify customers likely to churn with up to 94% accuracy using our advanced machine learning algorithms.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-purple-50 rounded-xl p-8 card-hover">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-purple-600 text-white mb-5">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Real-time Monitoring</h3>
+                    <p class="text-gray-600">
+                        Track customer behavior patterns in real-time to detect early warning signs of potential churn.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-indigo-50 rounded-xl p-8 card-hover">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-600 text-white mb-5">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Actionable Insights</h3>
+                    <p class="text-gray-600">
+                        Get personalized recommendations for retention strategies based on individual customer profiles.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="py-16 bg-blue-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold text-white">Proven Results</h2>
+                <p class="mt-4 max-w-2xl text-xl text-blue-100 mx-auto">
+                    Our machine learning model has helped businesses achieve significant improvements in customer retention.
+                </p>
+            </div>
+
+            <div class="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="bg-white bg-opacity-10 rounded-lg p-8 text-center">
+                    <p class="text-4xl font-extrabold text-white">94%</p>
+                    <p class="mt-2 text-lg text-blue-100">Prediction Accuracy</p>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-lg p-8 text-center">
+                    <p class="text-4xl font-extrabold text-white">35%</p>
+                    <p class="mt-2 text-lg text-blue-100">Churn Reduction</p>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-lg p-8 text-center">
+                    <p class="text-4xl font-extrabold text-white">28%</p>
+                    <p class="mt-2 text-lg text-blue-100">Revenue Increase</p>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-lg p-8 text-center">
+                    <p class="text-4xl font-extrabold text-white">3.2x</p>
+                    <p class="mt-2 text-lg text-blue-100">ROI</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl overflow-hidden">
+                <div class="px-6 py-12 sm:px-12 sm:py-16 lg:flex lg:items-center lg:justify-between">
+                    <div>
+                        <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
+                            <span class="block">Ready to reduce customer churn?</span>
+                            <span class="block text-blue-200">Start using our prediction model today.</span>
+                        </h2>
+                        <p class="mt-4 text-lg text-blue-100 max-w-3xl">
+                            Schedule a demo to see how our machine learning model can help your business identify and retain at-risk customers.
+                        </p>
+                    </div>
+                    <div class="mt-8 lg:mt-0 lg:ml-8">
+                        <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                            <button class="bg-white text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg text-base font-medium shadow-lg transition-colors duration-300">
+                                Schedule Demo
+                            </button>
+                            <button class="bg-transparent hover:bg-blue-700 text-white border border-white px-6 py-3 rounded-lg text-base font-medium shadow-lg transition-colors duration-300">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Database Connection Modal -->
+    <div id="databaseModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-gray-900">Database Connection Setup</h3>
+                    <button onclick="closeDatabaseModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="mb-6">
+                    <div class="flex space-x-4 mb-4">
+                        <button onclick="selectDatabase('mysql')" id="mysql-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">MySQL</button>
+                        <button onclick="selectDatabase('postgresql')" id="postgresql-btn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">PostgreSQL</button>
+                        <button onclick="selectDatabase('mongodb')" id="mongodb-btn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">MongoDB</button>
+                        <button onclick="selectDatabase('sqlite')" id="sqlite-btn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">SQLite</button>
+                    </div>
+                </div>
+
+                <form id="databaseForm" class="space-y-4">
+                    <div id="connection-fields">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Host</label>
+                                <input type="text" id="host" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="localhost" value="localhost">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Port</label>
+                                <input type="text" id="port" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="3306" value="3306">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Database Name</label>
+                            <input type="text" id="database" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="churn_prediction" value="churn_prediction">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                                <input type="text" id="username" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="root">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                                <input type="password" id="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="••••••••">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-md">
+                        <h4 class="font-medium text-gray-900 mb-2">Connection Status</h4>
+                        <div id="connection-status" class="flex items-center">
+                            <div class="h-3 w-3 bg-gray-400 rounded-full mr-2"></div>
+                            <span class="text-sm text-gray-600">Not connected</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="testConnection()" class="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition-colors">Test Connection</button>
+                        <button type="button" onclick="connectDatabase()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">Connect</button>
+                        <button type="button" onclick="closeDatabaseModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Database Schema Modal -->
+    <div id="schemaModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-4/5 lg:w-3/4 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-gray-900">Database Schema & Sample Data</h3>
+                    <button onclick="closeSchemaModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Schema Section -->
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-3">Required Tables Schema</h4>
+                        <div class="bg-gray-900 text-green-400 p-4 rounded-md text-sm font-mono overflow-x-auto max-h-96">
+                            <pre id="schema-content">-- Customer Data Table
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    age INT,
+    gender VARCHAR(10),
+    tenure INT,
+    monthly_charges DECIMAL(10,2),
+    total_charges DECIMAL(10,2),
+    contract_type VARCHAR(20),
+    payment_method VARCHAR(30),
+    internet_service VARCHAR(20),
+    phone_service BOOLEAN,
+    multiple_lines BOOLEAN,
+    online_security BOOLEAN,
+    online_backup BOOLEAN,
+    device_protection BOOLEAN,
+    tech_support BOOLEAN,
+    streaming_tv BOOLEAN,
+    streaming_movies BOOLEAN,
+    paperless_billing BOOLEAN,
+    churn_status BOOLEAN,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Usage Patterns Table
+CREATE TABLE usage_patterns (
+    usage_id INT PRIMARY KEY,
+    customer_id INT,
+    data_usage_gb DECIMAL(10,2),
+    call_minutes INT,
+    sms_count INT,
+    support_tickets INT,
+    login_frequency INT,
+    last_activity_date DATE,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+
+-- Predictions Table
+CREATE TABLE churn_predictions (
+    prediction_id INT PRIMARY KEY,
+    customer_id INT,
+    churn_probability DECIMAL(5,4),
+    risk_level VARCHAR(10),
+    prediction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    model_version VARCHAR(20),
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);</pre>
+                        </div>
+                    </div>
+                    
+                    <!-- Sample Data Section -->
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-3">Sample Data Preview</h4>
+                        <div class="space-y-4">
+                            <div class="bg-white border rounded-lg overflow-hidden">
+                                <div class="bg-gray-50 px-4 py-2 border-b">
+                                    <h5 class="font-medium text-gray-900">Customers Table</h5>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full text-sm">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th class="px-3 py-2 text-left">ID</th>
+                                                <th class="px-3 py-2 text-left">Age</th>
+                                                <th class="px-3 py-2 text-left">Tenure</th>
+                                                <th class="px-3 py-2 text-left">Monthly</th>
+                                                <th class="px-3 py-2 text-left">Churn</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="border-t">
+                                                <td class="px-3 py-2">1001</td>
+                                                <td class="px-3 py-2">34</td>
+                                                <td class="px-3 py-2">12</td>
+                                                <td class="px-3 py-2">$79.99</td>
+                                                <td class="px-3 py-2"><span class="text-red-600">Yes</span></td>
+                                            </tr>
+                                            <tr class="border-t">
+                                                <td class="px-3 py-2">1002</td>
+                                                <td class="px-3 py-2">45</td>
+                                                <td class="px-3 py-2">24</td>
+                                                <td class="px-3 py-2">$65.50</td>
+                                                <td class="px-3 py-2"><span class="text-green-600">No</span></td>
+                                            </tr>
+                                            <tr class="border-t">
+                                                <td class="px-3 py-2">1003</td>
+                                                <td class="px-3 py-2">28</td>
+                                                <td class="px-3 py-2">6</td>
+                                                <td class="px-3 py-2">$89.99</td>
+                                                <td class="px-3 py-2"><span class="text-red-600">Yes</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border rounded-lg overflow-hidden">
+                                <div class="bg-gray-50 px-4 py-2 border-b">
+                                    <h5 class="font-medium text-gray-900">Predictions Table</h5>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full text-sm">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th class="px-3 py-2 text-left">Customer ID</th>
+                                                <th class="px-3 py-2 text-left">Probability</th>
+                                                <th class="px-3 py-2 text-left">Risk Level</th>
+                                                <th class="px-3 py-2 text-left">Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="border-t">
+                                                <td class="px-3 py-2">1001</td>
+                                                <td class="px-3 py-2">0.8542</td>
+                                                <td class="px-3 py-2"><span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs">High</span></td>
+                                                <td class="px-3 py-2">2023-12-01</td>
+                                            </tr>
+                                            <tr class="border-t">
+                                                <td class="px-3 py-2">1002</td>
+                                                <td class="px-3 py-2">0.2341</td>
+                                                <td class="px-3 py-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Low</span></td>
+                                                <td class="px-3 py-2">2023-12-01</td>
+                                            </tr>
+                                            <tr class="border-t">
+                                                <td class="px-3 py-2">1003</td>
+                                                <td class="px-3 py-2">0.7823</td>
+                                                <td class="px-3 py-2"><span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs">High</span></td>
+                                                <td class="px-3 py-2">2023-12-01</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 flex space-x-3">
+                            <button onclick="generateSampleData()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">Generate Sample Data</button>
+                            <button onclick="downloadSchema()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">Download Schema</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end mt-6">
+                    <button onclick="closeSchemaModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center">
+                        <svg class="h-8 w-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"/>
+                        </svg>
+                        <span class="ml-2 text-xl font-bold">ChurnGuard AI</span>
+                    </div>
+                    <p class="mt-4 text-gray-400">
+                        Advanced machine learning solutions for customer retention in subscription-based businesses.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Solutions</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">Telecom</a></li>
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">SaaS</a></li>
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">E-commerce</a></li>
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">Media & Entertainment</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Company</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">About</a></li>
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="#" class="text-base text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-gray-800 pt-8">
+                <p class="text-base text-gray-400 text-center">
+                    &copy; 2023 ChurnGuard AI. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animate chart bars on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const chart = document.getElementById('chart');
+            const values = [65, 59, 80, 81, 56, 55, 72, 68];
+            
+            // Create bars
+            for (let i = 0; i < values.length; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.left = (i * 12.5) + '%';
+                bar.style.height = '0';
+                chart.appendChild(bar);
+                
+                // Animate after a small delay
+                setTimeout(() => {
+                    bar.style.height = (values[i] / 100 * 100) + '%';
+                }, 300 + (i * 100));
+            }
+        });
+
+        // Database connection state
+        let currentDatabase = 'mysql';
+        let connectionStatus = false;
+        
+        // Database modal functions
+        function openDatabaseModal() {
+            document.getElementById('databaseModal').classList.remove('hidden');
+        }
+        
+        function closeDatabaseModal() {
+            document.getElementById('databaseModal').classList.add('hidden');
+        }
+        
+        function openSchemaModal() {
+            document.getElementById('schemaModal').classList.remove('hidden');
+        }
+        
+        function closeSchemaModal() {
+            document.getElementById('schemaModal').classList.add('hidden');
+        }
+        
+        // Database selection
+        function selectDatabase(dbType) {
+            currentDatabase = dbType;
+            
+            // Update button styles
+            const buttons = ['mysql-btn', 'postgresql-btn', 'mongodb-btn', 'sqlite-btn'];
+            buttons.forEach(btnId => {
+                const btn = document.getElementById(btnId);
+                if (btnId === dbType + '-btn') {
+                    btn.className = 'px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors';
+                } else {
+                    btn.className = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors';
+                }
+            });
+            
+            // Update port based on database type
+            const portField = document.getElementById('port');
+            const hostField = document.getElementById('host');
+            const connectionFields = document.getElementById('connection-fields');
+            
+            switch(dbType) {
+                case 'mysql':
+                    portField.value = '3306';
+                    hostField.value = 'localhost';
+                    connectionFields.style.display = 'block';
+                    break;
+                case 'postgresql':
+                    portField.value = '5432';
+                    hostField.value = 'localhost';
+                    connectionFields.style.display = 'block';
+                    break;
+                case 'mongodb':
+                    portField.value = '27017';
+                    hostField.value = 'localhost';
+                    connectionFields.style.display = 'block';
+                    break;
+                case 'sqlite':
+                    connectionFields.style.display = 'none';
+                    break;
+            }
+        }
+        
+        // Test database connection
+        function testConnection() {
+            const statusDiv = document.getElementById('connection-status');
+            statusDiv.innerHTML = '<div class="h-3 w-3 bg-yellow-400 rounded-full mr-2 animate-pulse"></div><span class="text-sm text-yellow-600">Testing connection...</span>';
+            
+            // Simulate connection test
+            setTimeout(() => {
+                const success = Math.random() > 0.3; // 70% success rate for demo
+                if (success) {
+                    statusDiv.innerHTML = '<div class="h-3 w-3 bg-green-500 rounded-full mr-2"></div><span class="text-sm text-green-600">Connection successful!</span>';
+                } else {
+                    statusDiv.innerHTML = '<div class="h-3 w-3 bg-red-500 rounded-full mr-2"></div><span class="text-sm text-red-600">Connection failed. Please check your credentials.</span>';
+                }
+            }, 2000);
+        }
+        
+        // Connect to database
+        function connectDatabase() {
+            const host = document.getElementById('host').value;
+            const port = document.getElementById('port').value;
+            const database = document.getElementById('database').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (currentDatabase === 'sqlite' || (host && port && database && username)) {
+                const statusDiv = document.getElementById('connection-status');
+                statusDiv.innerHTML = '<div class="h-3 w-3 bg-yellow-400 rounded-full mr-2 animate-pulse"></div><span class="text-sm text-yellow-600">Connecting...</span>';
+                
+                setTimeout(() => {
+                    connectionStatus = true;
+                    statusDiv.innerHTML = '<div class="h-3 w-3 bg-green-500 rounded-full mr-2"></div><span class="text-sm text-green-600">Connected to ' + currentDatabase.toUpperCase() + ' database</span>';
+                    
+                    // Update main page status
+                    updateMainPageStatus();
+                    
+                    setTimeout(() => {
+                        closeDatabaseModal();
+                    }, 1500);
+                }, 2000);
+            } else {
+                alert('Please fill in all required fields.');
+            }
+        }
+        
+        // Update main page connection status
+        function updateMainPageStatus() {
+            const liveStatus = document.querySelector('.pulse').parentElement;
+            if (connectionStatus) {
+                liveStatus.innerHTML = '<div class="h-3 w-3 bg-green-500 rounded-full mr-2 pulse"></div><span class="text-sm text-gray-600">Database connected - Live predictions active</span>';
+            }
+        }
+        
+        // Generate sample data
+        function generateSampleData() {
+            const sampleData = {
+                customers: [
+                    { id: 1001, age: 34, tenure: 12, monthly: 79.99, churn: true },
+                    { id: 1002, age: 45, tenure: 24, monthly: 65.50, churn: false },
+                    { id: 1003, age: 28, tenure: 6, monthly: 89.99, churn: true },
+                    { id: 1004, age: 52, tenure: 36, monthly: 55.25, churn: false },
+                    { id: 1005, age: 31, tenure: 18, monthly: 72.80, churn: true }
+                ],
+                predictions: [
+                    { customer_id: 1001, probability: 0.8542, risk: 'High' },
+                    { customer_id: 1002, probability: 0.2341, risk: 'Low' },
+                    { customer_id: 1003, probability: 0.7823, risk: 'High' },
+                    { customer_id: 1004, probability: 0.1892, risk: 'Low' },
+                    { customer_id: 1005, probability: 0.6234, risk: 'Medium' }
+                ]
+            };
+            
+            // Create downloadable JSON file
+            const dataStr = JSON.stringify(sampleData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'churn_sample_data.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Download schema
+        function downloadSchema() {
+            const schemaContent = document.getElementById('schema-content').textContent;
+            const schemaBlob = new Blob([schemaContent], {type: 'text/sql'});
+            const url = URL.createObjectURL(schemaBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'churn_prediction_schema.sql';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        // Churn Calculation Algorithm
+        function calculateChurn() {
+            // Show loading state
+            const buttonText = document.getElementById('calculateButtonText');
+            const spinner = document.getElementById('calculateSpinner');
+            buttonText.textContent = 'Calculating...';
+            spinner.classList.remove('hidden');
+            
+            // Hide results initially
+            document.getElementById('resultsContainer').style.display = 'block';
+            document.getElementById('predictionResults').classList.add('hidden');
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Get form values
+                const age = parseInt(document.getElementById('age').value);
+                const gender = document.getElementById('gender').value;
+                const tenure = parseInt(document.getElementById('tenure').value);
+                const monthlyCharges = parseFloat(document.getElementById('monthlyCharges').value);
+                const totalCharges = parseFloat(document.getElementById('totalCharges').value);
+                const contractType = document.getElementById('contractType').value;
+                const paymentMethod = document.getElementById('paymentMethod').value;
+                const internetService = document.getElementById('internetService').value;
+                
+                // Get service checkboxes
+                const phoneService = document.getElementById('phoneService').checked;
+                const multipleLines = document.getElementById('multipleLines').checked;
+                const onlineSecurity = document.getElementById('onlineSecurity').checked;
+                const onlineBackup = document.getElementById('onlineBackup').checked;
+                const deviceProtection = document.getElementById('deviceProtection').checked;
+                const techSupport = document.getElementById('techSupport').checked;
+                const streamingTV = document.getElementById('streamingTV').checked;
+                const streamingMovies = document.getElementById('streamingMovies').checked;
+                const paperlessBilling = document.getElementById('paperlessBilling').checked;
+                
+                // Calculate churn probability using weighted factors
+                let churnScore = 0;
+                let riskFactors = [];
+                
+                // Age factor (younger customers more likely to churn)
+                if (age < 30) {
+                    churnScore += 15;
+                    riskFactors.push('Young demographic (higher mobility)');
+                } else if (age > 60) {
+                    churnScore -= 10;
+                }
+                
+                // Tenure factor (newer customers more likely to churn)
+                if (tenure < 6) {
+                    churnScore += 25;
+                    riskFactors.push('New customer (< 6 months)');
+                } else if (tenure < 12) {
+                    churnScore += 15;
+                    riskFactors.push('Short tenure (< 1 year)');
+                } else if (tenure > 24) {
+                    churnScore -= 15;
+                }
+                
+                // Monthly charges factor (higher charges = higher churn risk)
+                if (monthlyCharges > 80) {
+                    churnScore += 20;
+                    riskFactors.push('High monthly charges (>$80)');
+                } else if (monthlyCharges < 30) {
+                    churnScore -= 10;
+                }
+                
+                // Contract type factor
+                if (contractType === 'Month-to-month') {
+                    churnScore += 30;
+                    riskFactors.push('Month-to-month contract');
+                } else if (contractType === 'Two year') {
+                    churnScore -= 20;
+                }
+                
+                // Payment method factor
+                if (paymentMethod === 'Electronic check') {
+                    churnScore += 15;
+                    riskFactors.push('Electronic check payment');
+                } else if (paymentMethod === 'Credit card' || paymentMethod === 'Bank transfer') {
+                    churnScore -= 10;
+                }
+                
+                // Internet service factor
+                if (internetService === 'Fiber optic') {
+                    churnScore += 10;
+                } else if (internetService === 'No') {
+                    churnScore -= 15;
+                }
+                
+                // Services factor (fewer services = higher churn)
+                const serviceCount = [phoneService, multipleLines, onlineSecurity, onlineBackup, 
+                                   deviceProtection, techSupport, streamingTV, streamingMovies].filter(Boolean).length;
+                
+                if (serviceCount < 3) {
+                    churnScore += 20;
+                    riskFactors.push('Limited service adoption');
+                } else if (serviceCount > 6) {
+                    churnScore -= 15;
+                }
+                
+                // Paperless billing factor
+                if (paperlessBilling) {
+                    churnScore += 5;
+                }
+                
+                // Additional risk factors based on combinations
+                if (monthlyCharges > 70 && tenure < 12) {
+                    churnScore += 10;
+                    riskFactors.push('High charges with short tenure');
+                }
+                
+                if (!onlineSecurity && !techSupport) {
+                    churnScore += 8;
+                    riskFactors.push('No security or support services');
+                }
+                
+                // Normalize score to percentage (0-100)
+                let churnProbability = Math.max(0, Math.min(100, churnScore));
+                
+                // Add some randomness for realism
+                churnProbability += (Math.random() - 0.5) * 10;
+                churnProbability = Math.max(5, Math.min(95, churnProbability));
+                
+                // Determine risk level
+                let riskLevel, riskColor, circleColor;
+                if (churnProbability < 30) {
+                    riskLevel = 'Low Risk';
+                    riskColor = 'bg-green-100 text-green-800';
+                    circleColor = '#10b981';
+                } else if (churnProbability < 60) {
+                    riskLevel = 'Medium Risk';
+                    riskColor = 'bg-yellow-100 text-yellow-800';
+                    circleColor = '#f59e0b';
+                } else {
+                    riskLevel = 'High Risk';
+                    riskColor = 'bg-red-100 text-red-800';
+                    circleColor = '#ef4444';
+                }
+                
+                // Generate recommendations
+                const recommendations = generateRecommendations(churnProbability, riskFactors, {
+                    contractType, tenure, monthlyCharges, serviceCount
+                });
+                
+                // Update UI
+                displayResults(churnProbability, riskLevel, riskColor, circleColor, riskFactors, recommendations);
+                
+                // Reset button
+                buttonText.textContent = 'Calculate Churn Probability';
+                spinner.classList.add('hidden');
+                
+            }, 2000);
+        }
+        
+        function generateRecommendations(probability, riskFactors, customerData) {
+            const recommendations = [];
+            
+            if (probability > 60) {
+                recommendations.push('🚨 Immediate intervention required - Contact customer within 24 hours');
+                recommendations.push('💰 Offer retention discount or service upgrade');
+                recommendations.push('📞 Schedule personal consultation call');
+            } else if (probability > 30) {
+                recommendations.push('⚠️ Monitor closely - Increase engagement touchpoints');
+                recommendations.push('📧 Send targeted retention email campaign');
+                recommendations.push('🎁 Offer loyalty rewards or service add-ons');
+            } else {
+                recommendations.push('✅ Customer appears stable - Continue regular engagement');
+                recommendations.push('📈 Consider upselling additional services');
+                recommendations.push('💬 Gather feedback to maintain satisfaction');
+            }
+            
+            // Specific recommendations based on risk factors
+            if (customerData.contractType === 'Month-to-month') {
+                recommendations.push('📋 Offer annual contract with discount incentive');
+            }
+            
+            if (customerData.serviceCount < 3) {
+                recommendations.push('📦 Promote service bundles to increase engagement');
+            }
+            
+            if (customerData.monthlyCharges > 80) {
+                recommendations.push('💵 Review pricing options or offer cost optimization');
+            }
+            
+            return recommendations;
+        }
+        
+        function displayResults(probability, riskLevel, riskColor, circleColor, riskFactors, recommendations) {
+            // Hide initial state, show results
+            document.getElementById('resultsContainer').style.display = 'none';
+            document.getElementById('predictionResults').classList.remove('hidden');
+            
+            // Update percentage
+            document.getElementById('churnPercentage').textContent = Math.round(probability) + '%';
+            
+            // Update progress circle
+            const circle = document.getElementById('progressCircle');
+            const circumference = 2 * Math.PI * 50; // radius = 50
+            const offset = circumference - (probability / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            circle.style.stroke = circleColor;
+            
+            // Update risk badge
+            const riskBadge = document.getElementById('riskBadge');
+            riskBadge.className = `inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${riskColor}`;
+            document.getElementById('riskLevel').textContent = riskLevel;
+            
+            // Update risk factors
+            const riskFactorsContainer = document.getElementById('riskFactors');
+            riskFactorsContainer.innerHTML = '';
+            
+            if (riskFactors.length === 0) {
+                riskFactorsContainer.innerHTML = '<div class="text-sm text-gray-500">No significant risk factors identified</div>';
+            } else {
+                riskFactors.slice(0, 4).forEach(factor => {
+                    const factorDiv = document.createElement('div');
+                    factorDiv.className = 'flex items-center text-sm text-gray-700';
+                    factorDiv.innerHTML = `
+                        <svg class="w-4 h-4 text-orange-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                        ${factor}
+                    `;
+                    riskFactorsContainer.appendChild(factorDiv);
+                });
+            }
+            
+            // Update recommendations
+            const recommendationsContainer = document.getElementById('recommendations');
+            recommendationsContainer.innerHTML = '';
+            
+            recommendations.slice(0, 4).forEach(rec => {
+                const recDiv = document.createElement('div');
+                recDiv.className = 'mb-2 last:mb-0';
+                recDiv.textContent = rec;
+                recommendationsContainer.appendChild(recDiv);
+            });
+            
+            // Update model confidence (simulate slight variation)
+            const confidence = 92 + Math.round(Math.random() * 4);
+            document.getElementById('modelConfidence').textContent = confidence + '%';
+        }
+        
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97bd41ec231f59cf',t:'MTc1NzMyMjA0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
